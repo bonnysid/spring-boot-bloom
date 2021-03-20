@@ -1,9 +1,15 @@
 package com.bonnysid.bloom.User;
 
+import com.bonnysid.bloom.Post.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -58,5 +64,19 @@ public class UserService {
     @Transactional
     public void updateUser(long id, User u) {
         updateUser(id, u.getUsername(), u.getEmail());
+    }
+
+    public String getPhoto(long id) {
+        return userRepository.findById(id).orElseThrow(() -> new IllegalStateException("User with id \" + id + \" doesn't exists!")).getPhoto();
+    }
+
+    public void putPhoto(long id, MultipartFile image) {
+        Path fileNameAndPath = Paths.get("/photos", image.getOriginalFilename());
+        try {
+            Files.write(fileNameAndPath, image.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

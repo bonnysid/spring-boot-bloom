@@ -1,8 +1,9 @@
-package com.bonnysid.bloom.User;
+package com.bonnysid.bloom.rest;
 
-import com.bonnysid.bloom.Post.Post;
+import com.bonnysid.bloom.services.UserService;
+import com.bonnysid.bloom.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,10 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/")
 public class UserController {
-    private UserService userService;
-
-    @Value("${upload.path}")
-    private String uploadPath;
+    private final UserService userService;
 
     @Autowired
     public UserController(UserService userService) {
@@ -22,16 +20,19 @@ public class UserController {
     }
 
     @GetMapping("/users")
+    @PreAuthorize("hasAuthority('user:read')")
     public List<User> getUsers() {
         return userService.getUsers();
     }
 
     @GetMapping("profile/photo/{id}")
+    @PreAuthorize("hasAuthority('user:read')")
     public String getPhoto(@PathVariable long id) {
         return userService.getPhoto(id);
     }
 
     @PutMapping("profile/photo/{id}")
+    @PreAuthorize("hasAuthority('user:write')")
     public void putPhoto(@PathVariable("id") long id, @RequestParam("image") MultipartFile image) {
         System.out.println(image);
         userService.putPhoto(id, image);
@@ -39,26 +40,26 @@ public class UserController {
 
 
     @GetMapping(path = "profile/{id}")
+    @PreAuthorize("hasAuthority('user:read')")
     public User getUser(@PathVariable long id) {
         return userService.getUser(id);
     }
 
     @PostMapping("/users")
-    public void postUser(@RequestBody User user) {
+    @PreAuthorize("hasAuthority('user:write')")
+    public User postUser(@RequestBody User user) {
         userService.postUser(user);
+        return user;
     }
 
     @DeleteMapping(path = "users/{id}")
+    @PreAuthorize("hasAuthority('user:write')")
     public void deleteUser(@PathVariable long id) {
         userService.deleteUser(id);
     }
 
-//    @PutMapping(path = "{id}")
-//    public void updateUser(@PathVariable("id") long id, @RequestParam String name, @RequestParam String email) {
-//        userService.updateUser(id, name, email);
-//    }
-
     @PutMapping(path = "profile/{id}")
+    @PreAuthorize("hasAuthority('user:write')")
     public void updateUserByJSON(@PathVariable("id") long id, @RequestBody User user) {
         userService.updateUser(id, user);
     }

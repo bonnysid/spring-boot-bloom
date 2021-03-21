@@ -1,19 +1,12 @@
-package com.bonnysid.bloom.User;
+package com.bonnysid.bloom.model;
 
-import com.bonnysid.bloom.Post.Post;
-import org.springframework.web.multipart.MultipartFile;
-
+import javax.management.relation.Role;
 import javax.persistence.*;
-import javax.sql.DataSource;
-import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
-import java.util.Set;
 
 import static javax.persistence.CascadeType.ALL;
-import static javax.persistence.CascadeType.REFRESH;
-import static javax.persistence.FetchType.EAGER;
 
 @Entity
 @Table(name = "Users")
@@ -30,24 +23,74 @@ public class User {
     )
     @Column(name = "id", updatable = false)
     private long id;
+
     @Column(name = "username", nullable = false, unique = true, columnDefinition = "varchar(50)")
     private String username;
-    @Column(name = "email", nullable = false, unique = true, columnDefinition = "varchar(50)")
+
+    @Column(name = "email", nullable = false, unique = true, columnDefinition = "varchar(255)")
     private String email;
-    @Column(name = "status", columnDefinition = "varchar(50)")
-    private String status;
+
+    @Column(name = "password", nullable = false)
+    private String password;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", columnDefinition = "varchar(20)", nullable = false)
+    private Status status;
+
+    @Column(name = "profile_status", columnDefinition = "varchar(20)")
+    private String profileStatus;
+
     private String photo;
+
     @Column(name = "date_of_birthday")
     private LocalDate dateOfBirthday;
+
     @OneToMany(cascade = ALL, orphanRemoval = true)
     @JoinColumn(name = "user_id", insertable = false)
     private List<Post> posts;
+
     @Transient
-    private int age;
+    private Integer age;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private Roles role;
 
     public User() {
     }
-    public String getStatus() {
+
+    public User(String username, String email, String profileStatus, LocalDate dateOfBirthday) {
+        this.username = username;
+        this.email = email;
+        this.profileStatus = profileStatus;
+        this.dateOfBirthday = dateOfBirthday;
+    }
+
+    public User(String username, String email, Status status, LocalDate dateOfBirthday) {
+        this.username = username;
+        this.email = email;
+        this.status = status;
+        this.dateOfBirthday = dateOfBirthday;
+
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Roles getRole() {
+        return role;
+    }
+
+    public void setRole(Roles role) {
+        this.role = role;
+    }
+
+    public Status getStatus() {
         return status;
     }
 
@@ -59,14 +102,15 @@ public class User {
         this.photo = photo;
     }
 
-    public User(String username, String email, String status, LocalDate dateOfBirthday) {
-        this.username = username;
-        this.email = email;
-        this.status = status;
-        this.dateOfBirthday = dateOfBirthday;
+    public String getProfileStatus() {
+        return profileStatus;
     }
 
-    public void setStatus(String status) {
+    public void setProfileStatus(String profileStatus) {
+        this.profileStatus = profileStatus;
+    }
+
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -129,11 +173,11 @@ public class User {
         this.dateOfBirthday = dateOfBirthday;
     }
 
-    public int getAge() {
-        return Period.between(dateOfBirthday, LocalDate.now()).getYears();
+    public Integer getAge() {
+        return dateOfBirthday != null ? Period.between(dateOfBirthday, LocalDate.now()).getYears() : null;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 

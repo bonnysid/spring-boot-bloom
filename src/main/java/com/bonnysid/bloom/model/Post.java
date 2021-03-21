@@ -1,4 +1,4 @@
-package com.bonnysid.bloom.Post;
+package com.bonnysid.bloom.model;
 
 import javax.persistence.*;
 

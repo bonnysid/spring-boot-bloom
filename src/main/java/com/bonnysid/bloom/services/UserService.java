@@ -1,6 +1,7 @@
-package com.bonnysid.bloom.User;
+package com.bonnysid.bloom.services;
 
-import com.bonnysid.bloom.Post.Post;
+import com.bonnysid.bloom.model.User;
+import com.bonnysid.bloom.respos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

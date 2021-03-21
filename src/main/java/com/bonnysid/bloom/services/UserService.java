@@ -1,6 +1,9 @@
 package com.bonnysid.bloom.services;
 
-import com.bonnysid.bloom.model.User;
+import com.bonnysid.bloom.model.*;
+import com.bonnysid.bloom.model.enums.Roles;
+import com.bonnysid.bloom.model.enums.Status;
+import com.bonnysid.bloom.respos.LinksRepository;
 import com.bonnysid.bloom.respos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,23 +17,28 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+    private final LinksRepository linksRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, LinksRepository linksRepository) {
         this.userRepository = userRepository;
+        this.linksRepository = linksRepository;
     }
 
-    public List<User> getUsers() {
-        return userRepository.findAll();
+    public List<UserViewForUserList> getUsers() {
+        return userRepository.findAll().stream()
+                .map(UserViewForUserList::new)
+                .collect(Collectors.toList());
     }
 
-    public User getUser(long id) {
-        return userRepository.findById(id).orElseThrow(() -> new IllegalStateException("User with id \" + id + \" doesn't exists!"));
+    public UserView getUser(Long id) {
+        return new UserView(userRepository.findById(id).orElseThrow(() -> new IllegalStateException("User with id \" + id + \" doesn't exists!")));
     }
 
     public void postUser(User user) {
@@ -38,6 +46,8 @@ public class UserService {
         Optional<User> userByUsername = userRepository.getUserByUsername(user.getUsername());
         if (userByEmail.isPresent()) throw new IllegalStateException("Email is taken");
         if (userByUsername.isPresent()) throw new IllegalStateException("Username is taken");
+        user.setRole(Roles.USER);
+        user.setStatus(Status.ACTIVE);
         userRepository.save(user);
     }
 
@@ -53,15 +63,17 @@ public class UserService {
                 .orElseThrow(() -> new IllegalStateException("User with id \" + id + \" doesn't exists!"));
 
         if (name != null && !Objects.equals(user.getUsername(), name)) {
-            if(userRepository.getUserByUsername(name).isPresent()) throw new IllegalStateException("Username is taken");
+            if (userRepository.getUserByUsername(name).isPresent())
+                throw new IllegalStateException("Username is taken");
             user.setUsername(name);
         }
 
         if (email != null && !Objects.equals(user.getEmail(), email)) {
-            if(userRepository.getUserByEmail(email).isPresent()) throw new IllegalStateException("Email is taken");
+            if (userRepository.getUserByEmail(email).isPresent()) throw new IllegalStateException("Email is taken");
             user.setEmail(email);
         }
     }
+
     @Transactional
     public void updateUser(long id, User u) {
         updateUser(id, u.getUsername(), u.getEmail());

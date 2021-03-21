@@ -1,17 +1,5 @@
 package com.bonnysid.bloom.configs;
 
-import com.bonnysid.bloom.model.Post;
-import com.bonnysid.bloom.model.Status;
-import com.bonnysid.bloom.model.User;
-import com.bonnysid.bloom.respos.UserRepository;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-import java.time.LocalDate;
-import java.util.List;
-
-import static java.time.Month.*;
 //
 //@Configuration
 //public class UserConfig {

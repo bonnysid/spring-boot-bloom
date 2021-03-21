@@ -1,6 +1,8 @@
 package com.bonnysid.bloom.model;
 
-import javax.management.relation.Role;
+import com.bonnysid.bloom.model.enums.Roles;
+import com.bonnysid.bloom.model.enums.Status;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
@@ -12,15 +14,7 @@ import static javax.persistence.CascadeType.ALL;
 @Table(name = "Users")
 public class User {
     @Id
-    @SequenceGenerator(
-            name = "user_sequence",
-            sequenceName = "user_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "user_sequence"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false)
     private long id;
 
@@ -49,6 +43,10 @@ public class User {
     @JoinColumn(name = "user_id", insertable = false)
     private List<Post> posts;
 
+    @OneToMany(cascade = ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_id", insertable = false)
+    private List<Link> contacts;
+
     @Transient
     private Integer age;
 
@@ -72,6 +70,18 @@ public class User {
         this.status = status;
         this.dateOfBirthday = dateOfBirthday;
 
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public List<Link> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(List<Link> contacts) {
+        this.contacts = contacts;
     }
 
     public String getPassword() {

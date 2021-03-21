@@ -1,5 +1,7 @@
 package com.bonnysid.bloom.rest;
 
+import com.bonnysid.bloom.model.UserView;
+import com.bonnysid.bloom.model.UserViewForUserList;
 import com.bonnysid.bloom.services.UserService;
 import com.bonnysid.bloom.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,7 @@ public class UserController {
 
     @GetMapping("/users")
     @PreAuthorize("hasAuthority('user:read')")
-    public List<User> getUsers() {
+    public List<UserViewForUserList> getUsers() {
         return userService.getUsers();
     }
 
@@ -41,7 +43,7 @@ public class UserController {
 
     @GetMapping(path = "profile/{id}")
     @PreAuthorize("hasAuthority('user:read')")
-    public User getUser(@PathVariable long id) {
+    public UserView getUser(@PathVariable long id) {
         return userService.getUser(id);
     }
 

@@ -1,4 +1,4 @@
-package com.bonnysid.bloom.model;
+package com.bonnysid.bloom.model.enums;
 
 public enum Status {
     ACTIVE("ACTIVE"),

@@ -1,7 +1,6 @@
 package com.bonnysid.bloom.security;
 
-import com.bonnysid.bloom.model.Roles;
-import com.bonnysid.bloom.model.Status;
+import com.bonnysid.bloom.model.enums.Status;
 import com.bonnysid.bloom.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -9,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+
 
 public class SecurityUser implements UserDetails {
 
@@ -61,8 +61,7 @@ public class SecurityUser implements UserDetails {
 
     public static UserDetails fromUser(User user) {
         return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPassword(),
+                user.getEmail(), user.getPassword(),
                 user.getStatus().equals(Status.ACTIVE),
                 user.getStatus().equals(Status.ACTIVE),
                 user.getStatus().equals(Status.ACTIVE),

@@ -2,6 +2,9 @@ package com.bonnysid.bloom.model;
 
 import com.bonnysid.bloom.model.enums.Status;
 
+import java.util.Objects;
+import java.util.Optional;
+
 public class UserViewForUserList {
     private long id;
     private String username;
@@ -51,8 +54,8 @@ public class UserViewForUserList {
         this.status = status;
     }
 
-    public String getPhoto() {
-        return photo;
+    public Optional<String> getPhoto() {
+        return Optional.ofNullable(photo);
     }
 
     public void setPhoto(String photo) {
@@ -77,5 +80,18 @@ public class UserViewForUserList {
                 ", photo='" + photo + '\'' +
                 ", followed=" + followed +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserViewForUserList that = (UserViewForUserList) o;
+        return id == that.id && followed == that.followed && Objects.equals(username, that.username) && Objects.equals(email, that.email) && status == that.status && Objects.equals(photo, that.photo);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, email, status, photo, followed);
     }
 }

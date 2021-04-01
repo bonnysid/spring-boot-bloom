@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
+import java.util.Optional;
 
 import static javax.persistence.CascadeType.ALL;
 
@@ -104,8 +105,8 @@ public class User {
         return status;
     }
 
-    public String getPhoto() {
-        return photo;
+    public Optional<String> getPhoto() {
+        return Optional.ofNullable(photo);
     }
 
     public void setPhoto(String photo) {

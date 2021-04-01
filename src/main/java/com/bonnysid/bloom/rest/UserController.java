@@ -5,6 +5,7 @@ import com.bonnysid.bloom.model.UserViewForUserList;
 import com.bonnysid.bloom.services.UserService;
 import com.bonnysid.bloom.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,11 +30,13 @@ public class UserController {
 
     @GetMapping("profile/photo/{id}")
     @PreAuthorize("hasAuthority('user:read')")
-    public String getPhoto(@PathVariable long id) {
+    public byte[] getPhoto(@PathVariable long id) {
         return userService.getPhoto(id);
     }
 
-    @PutMapping("profile/photo/{id}")
+    @PutMapping(value = "profile/photo/{id}",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('user:write')")
     public void putPhoto(@PathVariable("id") long id, @RequestParam("image") MultipartFile image) {
         System.out.println(image);

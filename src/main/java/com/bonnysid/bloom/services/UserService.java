@@ -1,10 +1,13 @@
 package com.bonnysid.bloom.services;
 
+import com.bonnysid.bloom.bucket.BucketName;
+import com.bonnysid.bloom.filestore.FileStore;
 import com.bonnysid.bloom.model.*;
 import com.bonnysid.bloom.model.enums.Roles;
 import com.bonnysid.bloom.model.enums.Status;
 import com.bonnysid.bloom.respos.LinksRepository;
 import com.bonnysid.bloom.respos.UserRepository;
+import org.apache.http.entity.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,9 +17,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,11 +25,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final LinksRepository linksRepository;
+    private final FileStore fileStore;
 
     @Autowired
-    public UserService(UserRepository userRepository, LinksRepository linksRepository) {
+    public UserService(UserRepository userRepository, LinksRepository linksRepository, FileStore fileStore) {
         this.userRepository = userRepository;
         this.linksRepository = linksRepository;
+        this.fileStore = fileStore;
     }
 
     public List<UserViewForUserList> getUsers() {
@@ -38,7 +41,7 @@ public class UserService {
     }
 
     public UserView getUser(Long id) {
-        return new UserView(userRepository.findById(id).orElseThrow(() -> new IllegalStateException("User with id \" + id + \" doesn't exists!")));
+        return new UserView(getUserOrElseThrow(id));
     }
 
     public void postUser(User user) {
@@ -59,8 +62,7 @@ public class UserService {
 
     @Transactional
     public void updateUser(long id, String name, String email) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("User with id \" + id + \" doesn't exists!"));
+        User user = getUserOrElseThrow(id);
 
         if (name != null && !Objects.equals(user.getUsername(), name)) {
             if (userRepository.getUserByUsername(name).isPresent())
@@ -79,17 +81,37 @@ public class UserService {
         updateUser(id, u.getUsername(), u.getEmail());
     }
 
-    public String getPhoto(long id) {
-        return userRepository.findById(id).orElseThrow(() -> new IllegalStateException("User with id \" + id + \" doesn't exists!")).getPhoto();
+    public byte[] getPhoto(long id) {
+        User u = getUserOrElseThrow(id);
+        String path = String.format("%s/%s", BucketName.PROFILE_IMAGE.getName(), u.getId());
+        return u.getPhoto().map(key -> fileStore.download(path, key))
+                .orElse(new byte[0]);
     }
 
+    private User getUserOrElseThrow(long id) {
+        return userRepository.findById(id).orElseThrow(() -> new IllegalStateException("User with id \" + id + \" doesn't exists!"));
+    }
+
+    @Transactional
     public void putPhoto(long id, MultipartFile image) {
-        Path fileNameAndPath = Paths.get("/photos", image.getOriginalFilename());
-        try {
-            Files.write(fileNameAndPath, image.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(image.isEmpty()) throw new IllegalStateException("Cannot upload empty image [" + image.getSize() + "]");
+        if(!Arrays.asList(ContentType.IMAGE_JPEG.getMimeType(), ContentType.IMAGE_PNG.getMimeType(), ContentType.IMAGE_GIF.getMimeType()).contains(image.getContentType())) {
+            throw new IllegalStateException("Cannot upload file with this type [" + image.getContentType() + "], allows only jpeg, png, gif.!");
         }
 
+        User u = getUserOrElseThrow(id);
+        Map<String, String> metadata = new HashMap<>();
+        metadata.put("Content-Type", image.getContentType());
+        metadata.put("Content-Length", String.valueOf(image.getSize()));
+
+        String path = String.format("%s/%s", BucketName.PROFILE_IMAGE.getName(), u.getId());
+        String filename = String.format("%s-%s", image.getOriginalFilename(), UUID.randomUUID());
+
+        try {
+            fileStore.save(path, filename, Optional.of(metadata), image.getInputStream());
+            u.setPhoto(filename);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
 }

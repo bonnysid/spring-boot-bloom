@@ -18,8 +18,17 @@ public class UserViewForUserList {
         this.username = u.getUsername();
         this.email = u.getEmail();
         this.status = u.getStatus();
-        this.photo = u.getPhoto();
+        this.photo = u.getPhoto().orElse(null);
         this.followed = false;
+    }
+
+    public UserViewForUserList(User u, boolean followed) {
+        this.id = u.getId();
+        this.username = u.getUsername();
+        this.email = u.getEmail();
+        this.status = u.getStatus();
+        this.photo = u.getPhoto().orElse(null);
+        this.followed = followed;
     }
 
     public long getId() {

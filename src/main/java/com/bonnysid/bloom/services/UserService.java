@@ -9,14 +9,13 @@ import com.bonnysid.bloom.respos.LinksRepository;
 import com.bonnysid.bloom.respos.UserRepository;
 import org.apache.http.entity.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,22 +25,39 @@ public class UserService {
     private final UserRepository userRepository;
     private final LinksRepository linksRepository;
     private final FileStore fileStore;
+    private final SubscribesService subscribesService;
 
     @Autowired
-    public UserService(UserRepository userRepository, LinksRepository linksRepository, FileStore fileStore) {
+    public UserService(UserRepository userRepository, LinksRepository linksRepository, FileStore fileStore, SubscribesService subscribesService) {
         this.userRepository = userRepository;
         this.linksRepository = linksRepository;
         this.fileStore = fileStore;
+        this.subscribesService = subscribesService;
     }
 
     public List<UserViewForUserList> getUsers() {
+        String username = getUsername();
+        List<Long> followList = subscribesService.getAllSubscribes();
+
         return userRepository.findAll().stream()
-                .map(UserViewForUserList::new)
+                .filter(user -> !user.getEmail().equals(username))
+                .map(user -> new UserViewForUserList(user, followList.contains(user.getId())))
                 .collect(Collectors.toList());
     }
 
     public UserView getUser(Long id) {
-        return new UserView(getUserOrElseThrow(id));
+        String username = getUsername();
+        return new UserView(getUserOrElseThrow(id), subscribesService.checkSubscribe(id));
+    }
+
+    public UserView getUser(String usernameOfFollowed) {
+        String username = getUsername();
+        User user = userRepository.getUserByUsername(usernameOfFollowed).orElseThrow(() -> new IllegalStateException("User with username " + usernameOfFollowed + " doesn't exists!"));
+        return new UserView(user, subscribesService.checkSubscribe(user.getId()));
+    }
+
+    private String getUsername() {
+        return ((UserDetails)(SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getUsername();
     }
 
     public void postUser(User user) {
@@ -89,7 +105,7 @@ public class UserService {
     }
 
     private User getUserOrElseThrow(long id) {
-        return userRepository.findById(id).orElseThrow(() -> new IllegalStateException("User with id \" + id + \" doesn't exists!"));
+        return userRepository.findById(id).orElseThrow(() -> new IllegalStateException("User with id " + id + " doesn't exists!"));
     }
 
     @Transactional

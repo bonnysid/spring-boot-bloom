@@ -17,6 +17,15 @@ public class UserView extends UserViewForUserList{
         this.contacts = u.getContacts();
     }
 
+    public UserView(User u, boolean followed) {
+        super(u);
+        this.posts = u.getPosts();
+        this.age = u.getAge();
+        this.dateOfBirthday = u.getDateOfBirthday();
+        this.contacts = u.getContacts();
+        this.setFollowed(followed);
+    }
+
     public List<Link> getContacts() {
         return contacts;
     }

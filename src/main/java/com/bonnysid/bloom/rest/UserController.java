@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/")
+@RequestMapping("api/1.0/")
 public class UserController {
     private final UserService userService;
 
@@ -22,7 +22,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/users")
+    @GetMapping("users")
     @PreAuthorize("hasAuthority('user:read')")
     public List<UserViewForUserList> getUsers() {
         return userService.getUsers();
@@ -50,7 +50,7 @@ public class UserController {
         return userService.getUser(id);
     }
 
-    @PostMapping("/users")
+    @PostMapping("users")
     @PreAuthorize("hasAuthority('user:write')")
     public User postUser(@RequestBody User user) {
         userService.postUser(user);

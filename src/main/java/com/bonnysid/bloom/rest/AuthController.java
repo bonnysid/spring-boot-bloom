@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/1.0/auth")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;

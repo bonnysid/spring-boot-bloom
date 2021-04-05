@@ -32,6 +32,11 @@ public class Dialog {
         this.idLastMessage = idLastMessage;
     }
 
+    public Dialog(Long idFromUser, Long idToUser) {
+        this.idFromUser = idFromUser;
+        this.idToUser = idToUser;
+    }
+
     public Long getId() {
         return id;
     }

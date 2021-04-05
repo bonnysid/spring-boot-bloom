@@ -1,8 +1,10 @@
 package com.bonnysid.bloom.services;
 
+import com.bonnysid.bloom.model.Dialog;
 import com.bonnysid.bloom.model.Message;
 import com.bonnysid.bloom.respos.DialogsRepository;
 import com.bonnysid.bloom.respos.MessageRepository;
+import com.bonnysid.bloom.security.JwtAuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,10 +30,17 @@ public class ChatService {
     }
 
     public List<Message> getMessagesByDialogId(Long id) {
+        if(!checkDialogRequest(id)) throw new JwtAuthenticationException("You don't have access to this dialog!");
         return messageRepository.getMessagesByDialogId(id).orElseThrow(() -> new IllegalStateException("Dialog with this id doesn't exists!"));
     }
 
-    public void createDialog() {
+    public boolean checkDialogRequest(Long id) {
+        return userService.getAuthId().equals(dialogsRepository.findById(id).orElseThrow(() -> new IllegalStateException("Dialog doesn't exists!")).getIdFromUser());
+    }
 
+    public void createDialog(Long idTo) {
+        if(dialogsRepository.findByFromIDAndToID(userService.getAuthId(), idTo).isPresent()) throw new IllegalStateException("This dialog already exists");
+        Dialog dialog = new Dialog(userService.getAuthId(), idTo);
+        dialogsRepository.save(dialog);
     }
 }

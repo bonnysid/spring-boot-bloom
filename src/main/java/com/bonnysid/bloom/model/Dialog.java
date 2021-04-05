@@ -18,41 +18,30 @@ public class Dialog {
     @Column(name = "id_to_user")
     private Long idToUser;
 
-    @Column(name = "last_message")
-    private String lastMessage;
+    @Column(name = "id_last_message")
+    private String idLastMessage;
 
-    @Column(name = "last_message_date")
-    private LocalDate lastMessageDate;
 
     public Dialog() {
     }
 
-    public Dialog(Long id, Long idFromUser, Long idToUser, String lastMessage, LocalDate lastMessageDate) {
+    public Dialog(Long id, Long idFromUser, Long idToUser, String idLastMessage) {
         this.id = id;
         this.idFromUser = idFromUser;
         this.idToUser = idToUser;
-        this.lastMessage = lastMessage;
-        this.lastMessageDate = lastMessageDate;
+        this.idLastMessage = idLastMessage;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getLastMessage() {
-        return lastMessage;
+    public String getIdLastMessage() {
+        return idLastMessage;
     }
 
-    public void setLastMessage(String lastMessage) {
-        this.lastMessage = lastMessage;
-    }
-
-    public LocalDate getLastMessageDate() {
-        return lastMessageDate;
-    }
-
-    public void setLastMessageDate(LocalDate lastMessageDate) {
-        this.lastMessageDate = lastMessageDate;
+    public void setIdLastMessage(String idLastMessage) {
+        this.idLastMessage = idLastMessage;
     }
 
     public void setId(Long id) {
@@ -81,8 +70,7 @@ public class Dialog {
                 "id=" + id +
                 ", idFromUser=" + idFromUser +
                 ", idToUser=" + idToUser +
-                ", lastMessage='" + lastMessage + '\'' +
-                ", lastMessageDate=" + lastMessageDate +
+                ", idLastMessage='" + idLastMessage + '\'' +
                 '}';
     }
 }

@@ -6,7 +6,7 @@ import com.bonnysid.bloom.model.enums.Status;
 import java.util.Objects;
 import java.util.Optional;
 
-public class UserViewForUserList {
+public class UserListView {
     private long id;
     private String username;
     private String email;
@@ -14,7 +14,7 @@ public class UserViewForUserList {
     private String photo;
     private boolean followed;
 
-    public UserViewForUserList(User u) {
+    public UserListView(User u) {
         this.id = u.getId();
         this.username = u.getUsername();
         this.email = u.getEmail();
@@ -23,7 +23,7 @@ public class UserViewForUserList {
         this.followed = false;
     }
 
-    public UserViewForUserList(User u, boolean followed) {
+    public UserListView(User u, boolean followed) {
         this.id = u.getId();
         this.username = u.getUsername();
         this.email = u.getEmail();
@@ -96,7 +96,7 @@ public class UserViewForUserList {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserViewForUserList that = (UserViewForUserList) o;
+        UserListView that = (UserListView) o;
         return id == that.id && followed == that.followed && Objects.equals(username, that.username) && Objects.equals(email, that.email) && status == that.status && Objects.equals(photo, that.photo);
     }
 

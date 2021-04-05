@@ -2,7 +2,7 @@ package com.bonnysid.bloom.services;
 
 import com.bonnysid.bloom.bucket.BucketName;
 import com.bonnysid.bloom.model.view.UserView;
-import com.bonnysid.bloom.model.view.UserViewForUserList;
+import com.bonnysid.bloom.model.view.UserListView;
 import com.bonnysid.bloom.storage.FileStore;
 import com.bonnysid.bloom.model.*;
 import com.bonnysid.bloom.model.enums.Roles;
@@ -37,13 +37,13 @@ public class UserService {
         this.subscribesService = subscribesService;
     }
 
-    public List<UserViewForUserList> getUsers() {
+    public List<UserListView> getUsers() {
         String username = getUsername();
         List<Long> followList = subscribesService.getAllSubscribes();
 
         return userRepository.findAll().stream()
                 .filter(user -> !user.getEmail().equals(username))
-                .map(user -> new UserViewForUserList(user, followList.contains(user.getId())))
+                .map(user -> new UserListView(user, followList.contains(user.getId())))
                 .collect(Collectors.toList());
     }
 

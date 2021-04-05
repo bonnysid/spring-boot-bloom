@@ -1,7 +1,7 @@
 package com.bonnysid.bloom.rest;
 
 import com.bonnysid.bloom.model.view.UserView;
-import com.bonnysid.bloom.model.view.UserViewForUserList;
+import com.bonnysid.bloom.model.view.UserListView;
 import com.bonnysid.bloom.services.UserService;
 import com.bonnysid.bloom.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class UserController {
 
     @GetMapping("users")
     @PreAuthorize("hasAuthority('user:read')")
-    public List<UserViewForUserList> getUsers() {
+    public List<UserListView> getUsers() {
         return userService.getUsers();
     }
 

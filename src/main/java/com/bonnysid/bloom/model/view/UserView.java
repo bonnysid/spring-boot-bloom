@@ -7,7 +7,7 @@ import com.bonnysid.bloom.model.User;
 import java.time.LocalDate;
 import java.util.List;
 
-public class UserView extends UserViewForUserList {
+public class UserView extends UserListView {
     private LocalDate dateOfBirthday;
     private List<Post> posts;
     private List<Link> contacts;

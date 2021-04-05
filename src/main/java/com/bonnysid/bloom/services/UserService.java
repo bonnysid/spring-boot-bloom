@@ -3,6 +3,7 @@ package com.bonnysid.bloom.services;
 import com.bonnysid.bloom.bucket.BucketName;
 import com.bonnysid.bloom.model.view.UserView;
 import com.bonnysid.bloom.model.view.UserListView;
+import com.bonnysid.bloom.security.AuthInfo;
 import com.bonnysid.bloom.storage.FileStore;
 import com.bonnysid.bloom.model.*;
 import com.bonnysid.bloom.model.enums.Roles;
@@ -11,8 +12,6 @@ import com.bonnysid.bloom.respos.LinksRepository;
 import com.bonnysid.bloom.respos.UserRepository;
 import org.apache.http.entity.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,20 +24,20 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final LinksRepository linksRepository;
     private final FileStore fileStore;
     private final SubscribesService subscribesService;
+    private final AuthInfo authInfo;
 
     @Autowired
-    public UserService(UserRepository userRepository, LinksRepository linksRepository, FileStore fileStore, SubscribesService subscribesService) {
+    public UserService(UserRepository userRepository, FileStore fileStore, SubscribesService subscribesService, AuthInfo authInfo) {
         this.userRepository = userRepository;
-        this.linksRepository = linksRepository;
         this.fileStore = fileStore;
         this.subscribesService = subscribesService;
+        this.authInfo = authInfo;
     }
 
     public List<UserListView> getUsers() {
-        String username = getAuthUsername();
+        String username = authInfo.getAuthUsername();
         List<Long> followList = subscribesService.getAllSubscribes();
 
         return userRepository.findAll().stream()
@@ -48,22 +47,12 @@ public class UserService {
     }
 
     public UserView getUser(Long id) {
-        String username = getAuthUsername();
         return new UserView(getUserOrElseThrow(id), subscribesService.checkSubscribe(id));
     }
 
     public UserView getUser(String usernameOfFollowed) {
-        String username = getAuthUsername();
         User user = userRepository.getUserByUsername(usernameOfFollowed).orElseThrow(() -> new IllegalStateException("User with username " + usernameOfFollowed + " doesn't exists!"));
         return new UserView(user, subscribesService.checkSubscribe(user.getId()));
-    }
-
-    public String getAuthUsername() {
-        return ((UserDetails)(SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getUsername();
-    }
-
-    public Long getAuthId() {
-        return userRepository.getUserIdByUsername(getAuthUsername()).orElseThrow(() -> new IllegalStateException("User doesn't exists!"));
     }
 
     public void postUser(User user) {
@@ -116,8 +105,8 @@ public class UserService {
 
     @Transactional
     public void putPhoto(long id, MultipartFile image) {
-        if(image.isEmpty()) throw new IllegalStateException("Cannot upload empty image [" + image.getSize() + "]");
-        if(!Arrays.asList(ContentType.IMAGE_JPEG.getMimeType(), ContentType.IMAGE_PNG.getMimeType(), ContentType.IMAGE_GIF.getMimeType()).contains(image.getContentType())) {
+        if (image.isEmpty()) throw new IllegalStateException("Cannot upload empty image [" + image.getSize() + "]");
+        if (!Arrays.asList(ContentType.IMAGE_JPEG.getMimeType(), ContentType.IMAGE_PNG.getMimeType(), ContentType.IMAGE_GIF.getMimeType()).contains(image.getContentType())) {
             throw new IllegalStateException("Cannot upload file with this type [" + image.getContentType() + "], allows only jpeg, png, gif.!");
         }
 

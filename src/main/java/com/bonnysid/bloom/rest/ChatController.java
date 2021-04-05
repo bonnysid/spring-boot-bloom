@@ -4,12 +4,14 @@ import com.bonnysid.bloom.model.Message;
 import com.bonnysid.bloom.services.ChatService;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ChatController {
 
     private final ChatService chatService;
+
 
     public ChatController(ChatService chatService) {
         this.chatService = chatService;

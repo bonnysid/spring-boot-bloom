@@ -12,16 +12,22 @@ import java.util.List;
 
 public class SecurityUser implements UserDetails {
 
+    private final Long id;
     private final String username;
     private final String password;
     private final List<SimpleGrantedAuthority> authorities;
     private final boolean isActive;
 
-    public SecurityUser(String username, String password, List<SimpleGrantedAuthority> authorities, boolean isActive) {
+    public SecurityUser(Long id, String username, String password, List<SimpleGrantedAuthority> authorities, boolean isActive) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.authorities = authorities;
         this.isActive = isActive;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     @Override

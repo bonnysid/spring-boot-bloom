@@ -63,6 +63,12 @@ public class Message {
         this.date = date;
     }
 
+    public Message(String text, Long dialogId, LocalDate date) {
+        this.text = text;
+        this.dialogId = dialogId;
+        this.date = date;
+    }
+
     @Override
     public String toString() {
         return "Message{" +

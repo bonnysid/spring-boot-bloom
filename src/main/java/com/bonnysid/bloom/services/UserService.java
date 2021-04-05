@@ -38,7 +38,7 @@ public class UserService {
     }
 
     public List<UserListView> getUsers() {
-        String username = getUsername();
+        String username = getAuthUsername();
         List<Long> followList = subscribesService.getAllSubscribes();
 
         return userRepository.findAll().stream()
@@ -48,18 +48,22 @@ public class UserService {
     }
 
     public UserView getUser(Long id) {
-        String username = getUsername();
+        String username = getAuthUsername();
         return new UserView(getUserOrElseThrow(id), subscribesService.checkSubscribe(id));
     }
 
     public UserView getUser(String usernameOfFollowed) {
-        String username = getUsername();
+        String username = getAuthUsername();
         User user = userRepository.getUserByUsername(usernameOfFollowed).orElseThrow(() -> new IllegalStateException("User with username " + usernameOfFollowed + " doesn't exists!"));
         return new UserView(user, subscribesService.checkSubscribe(user.getId()));
     }
 
-    private String getUsername() {
+    public String getAuthUsername() {
         return ((UserDetails)(SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getUsername();
+    }
+
+    public Long getAuthId() {
+        return userRepository.getUserIdByUsername(getAuthUsername()).orElseThrow(() -> new IllegalStateException("User doesn't exists!"));
     }
 
     public void postUser(User user) {
@@ -106,7 +110,7 @@ public class UserService {
                 .orElse(new byte[0]);
     }
 
-    private User getUserOrElseThrow(long id) {
+    public User getUserOrElseThrow(long id) {
         return userRepository.findById(id).orElseThrow(() -> new IllegalStateException("User with id " + id + " doesn't exists!"));
     }
 

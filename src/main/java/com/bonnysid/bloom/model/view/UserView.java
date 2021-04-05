@@ -1,9 +1,13 @@
-package com.bonnysid.bloom.model;
+package com.bonnysid.bloom.model.view;
+
+import com.bonnysid.bloom.model.Link;
+import com.bonnysid.bloom.model.Post;
+import com.bonnysid.bloom.model.User;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public class UserView extends UserViewForUserList{
+public class UserView extends UserViewForUserList {
     private LocalDate dateOfBirthday;
     private List<Post> posts;
     private List<Link> contacts;

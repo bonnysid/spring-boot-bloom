@@ -1,4 +1,4 @@
-package com.bonnysid.bloom.model;
+package com.bonnysid.bloom.model.view;
 
 import java.io.Serializable;
 import java.util.Objects;

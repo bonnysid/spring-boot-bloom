@@ -1,5 +1,6 @@
-package com.bonnysid.bloom.model;
+package com.bonnysid.bloom.model.view;
 
+import com.bonnysid.bloom.model.User;
 import com.bonnysid.bloom.model.enums.Status;
 
 import java.util.Objects;

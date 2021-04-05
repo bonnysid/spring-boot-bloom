@@ -1,7 +1,9 @@
 package com.bonnysid.bloom.services;
 
 import com.bonnysid.bloom.bucket.BucketName;
-import com.bonnysid.bloom.filestore.FileStore;
+import com.bonnysid.bloom.model.view.UserView;
+import com.bonnysid.bloom.model.view.UserViewForUserList;
+import com.bonnysid.bloom.storage.FileStore;
 import com.bonnysid.bloom.model.*;
 import com.bonnysid.bloom.model.enums.Roles;
 import com.bonnysid.bloom.model.enums.Status;

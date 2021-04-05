@@ -1,5 +1,7 @@
 package com.bonnysid.bloom.model;
 
+import com.bonnysid.bloom.model.view.SubscribeKey;
+
 import javax.persistence.*;
 
 @Entity

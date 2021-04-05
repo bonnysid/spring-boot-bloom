@@ -1,7 +1,7 @@
 package com.bonnysid.bloom.rest;
 
-import com.bonnysid.bloom.model.UserView;
-import com.bonnysid.bloom.model.UserViewForUserList;
+import com.bonnysid.bloom.model.view.UserView;
+import com.bonnysid.bloom.model.view.UserViewForUserList;
 import com.bonnysid.bloom.services.UserService;
 import com.bonnysid.bloom.model.User;
 import org.springframework.beans.factory.annotation.Autowired;

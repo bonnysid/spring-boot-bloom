@@ -1,9 +1,8 @@
 package com.bonnysid.bloom.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.amazonaws.services.dynamodbv2.xspec.L;
+
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -19,13 +18,13 @@ public class Dialog {
     private Long idToUser;
 
     @Column(name = "id_last_message")
-    private String idLastMessage;
+    private Long idLastMessage;
 
 
     public Dialog() {
     }
 
-    public Dialog(Long id, Long idFromUser, Long idToUser, String idLastMessage) {
+    public Dialog(Long id, Long idFromUser, Long idToUser, Long idLastMessage) {
         this.id = id;
         this.idFromUser = idFromUser;
         this.idToUser = idToUser;
@@ -41,11 +40,11 @@ public class Dialog {
         return id;
     }
 
-    public String getIdLastMessage() {
+    public Long getIdLastMessage() {
         return idLastMessage;
     }
 
-    public void setIdLastMessage(String idLastMessage) {
+    public void setIdLastMessage(Long idLastMessage) {
         this.idLastMessage = idLastMessage;
     }
 

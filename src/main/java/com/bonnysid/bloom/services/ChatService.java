@@ -35,6 +35,15 @@ public class ChatService {
         if (userService.getUser(idTo) != null) {
             messageRepository.save(message);
             simpMessagingTemplate.convertAndSend("/topic/messages/" + idTo, message);
+            if(dialogsRepository.findByFromIDAndToID(idTo, message.getIdFromUser()).isEmpty()) {
+                Dialog dialog = dialogsRepository.save(new Dialog(idTo, message.getIdFromUser()));
+                Message m = new Message();
+                m.setDialogId(dialog.getId());
+                m.setDate(message.getDate());
+                m.setText(message.getText());
+                m.setIdFromUser(message.getIdFromUser());
+                messageRepository.save(m);
+            }
         }
     }
 
@@ -45,15 +54,28 @@ public class ChatService {
                 .collect(Collectors.toList());
     }
 
+    public List<MessageView> getMessagesByUserId(Long id) {
+        if(!checkDialogRequest(id)) throw new JwtAuthenticationException("Dialog doesn't exists!");
+        return messageRepository.getMessagesByUserId(authInfo.getAuthId(), id).orElseThrow(() -> new IllegalStateException("Dialog with this id doesn't exists!")).stream()
+                .map(message -> new MessageView(message.getId(), message.getText(), userService.getUser(message.getIdFromUser()).getUsername(), message.getDate()))
+                .collect(Collectors.toList());
+    }
+
     public boolean checkDialogRequest(Long id) {
-        return authInfo.getAuthId().equals(dialogsRepository.findById(id).orElseThrow(() -> new IllegalStateException("Dialog doesn't exists!")).getIdFromUser());
+        return dialogsRepository.findByFromIDAndToID(authInfo.getAuthId(), id).isPresent();
+    }
+
+    public void startChat(Long id) {
+//        Dialog dialog = dialogsRepository.findByFromIDAndToID()
     }
 
     public void createDialog(Long idTo) {
         if(dialogsRepository.findByFromIDAndToID(authInfo.getAuthId(), idTo).isPresent()) throw new IllegalStateException("This dialog already exists");
-        Dialog dialog = new Dialog(authInfo.getAuthId(), idTo);
-        Dialog dialog2 = new Dialog(idTo, authInfo.getAuthId());
-        dialogsRepository.save(dialog);
-        dialogsRepository.save(dialog2);
+        dialogsRepository.saveDialog(authInfo.getAuthId(), idTo);
+    }
+
+    public void deleteDialog(Long id) {
+        if(dialogsRepository.findById(id).isEmpty()) throw new IllegalStateException("This dialog already deleted");
+        dialogsRepository.deleteById(id);
     }
 }

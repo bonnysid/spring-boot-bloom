@@ -6,10 +6,7 @@ import com.bonnysid.bloom.services.ChatService;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,6 +29,16 @@ public class ChatController {
 
     @GetMapping("dialogs/{id}/messages")
     public List<MessageView> getMessages(@PathVariable Long id) {
-        return chatService.getMessagesByDialogId(id);
+        return chatService.getMessagesByUserId(id);
+    }
+
+    @PostMapping("dialogs/{id}")
+    public void createDialog(@PathVariable Long id) {
+        chatService.createDialog(id);
+    }
+
+    @DeleteMapping("dialogs/{id}")
+    public void deleteDialog(@PathVariable Long id) {
+        chatService.deleteDialog(id);
     }
 }

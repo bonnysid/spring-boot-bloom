@@ -20,6 +20,7 @@ public class AuthInfo {
     }
 
     public Long getAuthId() {
-        return userRepository.getUserIdByUsername(getAuthUsername()).orElseThrow(() -> new IllegalStateException("User doesn't exists!"));
+        System.out.println(getAuthUsername());
+        return userRepository.getUserIdByEmail(getAuthUsername()).orElseThrow(() -> new IllegalStateException("User doesn't exists!"));
     }
 }

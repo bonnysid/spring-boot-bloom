@@ -1,21 +1,29 @@
 package com.bonnysid.bloom.model.view;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.time.LocalDate;
 
 public class MessageView {
     private Long id;
     private String text;
     private String fromUsername;
+    private LocalDate date;
 
     public MessageView() {
     }
 
-    public MessageView(Long id, String text, String fromUsername) {
+    public MessageView(Long id, String text, String fromUsername, LocalDate date) {
         this.id = id;
         this.text = text;
         this.fromUsername = fromUsername;
+        this.date = date;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public Long getId() {
@@ -48,6 +56,7 @@ public class MessageView {
                 "id=" + id +
                 ", text='" + text + '\'' +
                 ", fromUsername='" + fromUsername + '\'' +
+                ", date=" + date +
                 '}';
     }
 }

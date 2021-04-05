@@ -2,6 +2,7 @@ package com.bonnysid.bloom.services;
 
 import com.bonnysid.bloom.model.Dialog;
 import com.bonnysid.bloom.model.Message;
+import com.bonnysid.bloom.model.view.MessageView;
 import com.bonnysid.bloom.respos.DialogsRepository;
 import com.bonnysid.bloom.respos.MessageRepository;
 import com.bonnysid.bloom.security.AuthInfo;
@@ -11,6 +12,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ChatService {
@@ -36,9 +38,11 @@ public class ChatService {
         }
     }
 
-    public List<Message> getMessagesByDialogId(Long id) {
+    public List<MessageView> getMessagesByDialogId(Long id) {
         if(!checkDialogRequest(id)) throw new JwtAuthenticationException("You don't have access to this dialog!");
-        return messageRepository.getMessagesByDialogId(id).orElseThrow(() -> new IllegalStateException("Dialog with this id doesn't exists!"));
+        return messageRepository.getMessagesByDialogId(id).orElseThrow(() -> new IllegalStateException("Dialog with this id doesn't exists!")).stream()
+                .map(message -> new MessageView(message.getId(), message.getText(), userService.getUser(message.getIdFromUser()).getUsername(), message.getDate()))
+                .collect(Collectors.toList());
     }
 
     public boolean checkDialogRequest(Long id) {
@@ -48,6 +52,8 @@ public class ChatService {
     public void createDialog(Long idTo) {
         if(dialogsRepository.findByFromIDAndToID(authInfo.getAuthId(), idTo).isPresent()) throw new IllegalStateException("This dialog already exists");
         Dialog dialog = new Dialog(authInfo.getAuthId(), idTo);
+        Dialog dialog2 = new Dialog(idTo, authInfo.getAuthId());
         dialogsRepository.save(dialog);
+        dialogsRepository.save(dialog2);
     }
 }

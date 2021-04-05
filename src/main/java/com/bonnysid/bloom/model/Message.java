@@ -21,14 +21,18 @@ public class Message {
     @Column(name = "date")
     private LocalDate date;
 
+    @Column(name = "id_from_user")
+    private Long idFromUser;
+
     public Message() {
     }
 
-    public Message(Long id, String text, Long dialogId, LocalDate date) {
+    public Message(Long id, String text, Long dialogId, Long idFromUser, LocalDate date) {
         this.id = id;
         this.text = text;
         this.dialogId = dialogId;
         this.date = date;
+        this.idFromUser = idFromUser;
     }
 
     public Long getId() {
@@ -41,6 +45,14 @@ public class Message {
 
     public String getText() {
         return text;
+    }
+
+    public Long getIdFromUser() {
+        return idFromUser;
+    }
+
+    public void setIdFromUser(Long idFromUser) {
+        this.idFromUser = idFromUser;
     }
 
     public void setText(String text) {

@@ -20,21 +20,21 @@ public class SubscribesService {
     }
 
     public boolean checkSubscribe(Long id) {
-        return subscribesRepository.findSubscribes(authInfo.getAuthUsername(), id).isPresent();
+        return subscribesRepository.findSubscribes(authInfo.getAuthEmail(), id).isPresent();
     }
 
     public void follow(Long id) {
         if (checkSubscribe(id)) throw new IllegalStateException("Follow already exist!");
-        subscribesRepository.save(new Subscribe(authInfo.getAuthUsername(), id));
+        subscribesRepository.save(new Subscribe(authInfo.getAuthEmail(), id));
     }
 
     public void unfollow(Long id) {
         if (!checkSubscribe(id)) throw new IllegalStateException("Follow already not exist!");
-        subscribesRepository.delete(new Subscribe(authInfo.getAuthUsername(), id));
+        subscribesRepository.delete(new Subscribe(authInfo.getAuthEmail(), id));
     }
 
     public List<Long> getAllSubscribes() {
-        return subscribesRepository.findAllSubscribes(authInfo.getAuthUsername())
+        return subscribesRepository.findAllSubscribes(authInfo.getAuthEmail())
                 .orElse(new ArrayList<>()).stream()
                 .map(Subscribe::getIdFollowedUser)
                 .collect(Collectors.toList());

@@ -1,6 +1,7 @@
 package com.bonnysid.bloom.services;
 
 import com.bonnysid.bloom.bucket.BucketName;
+import com.bonnysid.bloom.model.view.Me;
 import com.bonnysid.bloom.model.view.UserView;
 import com.bonnysid.bloom.model.view.UserListView;
 import com.bonnysid.bloom.security.AuthInfo;
@@ -8,7 +9,6 @@ import com.bonnysid.bloom.storage.FileStore;
 import com.bonnysid.bloom.model.*;
 import com.bonnysid.bloom.model.enums.Roles;
 import com.bonnysid.bloom.model.enums.Status;
-import com.bonnysid.bloom.respos.LinksRepository;
 import com.bonnysid.bloom.respos.UserRepository;
 import org.apache.http.entity.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class UserService {
     }
 
     public List<UserListView> getUsers() {
-        String username = authInfo.getAuthUsername();
+        String username = authInfo.getAuthEmail();
         List<Long> followList = subscribesService.getAllSubscribes();
 
         return userRepository.findAll().stream()
@@ -124,5 +124,9 @@ public class UserService {
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    public Me getMe() {
+        return new Me(authInfo.getAuthId(), authInfo.getAuthEmail(), authInfo.getAuthUsername());
     }
 }

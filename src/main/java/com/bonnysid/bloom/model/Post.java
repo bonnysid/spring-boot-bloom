@@ -5,7 +5,7 @@ import javax.persistence.*;
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity
-@Table(name = "Posts")
+@Table(name = "posts")
 public class Post {
     @Id
     @SequenceGenerator(name = "post_seq", sequenceName = "post_seq", allocationSize = 1)

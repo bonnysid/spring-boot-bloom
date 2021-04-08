@@ -6,6 +6,7 @@ import com.bonnysid.bloom.services.SubscribesService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("api/1.0/follow/")
 public class SubscribesController {

@@ -1,9 +1,8 @@
 package com.bonnysid.bloom.model;
 
-import com.amazonaws.services.dynamodbv2.xspec.L;
-
 import javax.persistence.*;
-import java.time.LocalDate;
+
+import static javax.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "dialogs")
@@ -17,18 +16,19 @@ public class Dialog {
     @Column(name = "id_to_user")
     private Long idToUser;
 
-    @Column(name = "id_last_message")
-    private Long idLastMessage;
+    @OneToOne(cascade = ALL, orphanRemoval = true)
+    @JoinColumn(name = "id_last_message", insertable = false)
+    private Message lastMessage;
 
 
     public Dialog() {
     }
 
-    public Dialog(Long id, Long idFromUser, Long idToUser, Long idLastMessage) {
+    public Dialog(Long id, Long idFromUser, Long idToUser, Message lastMessage) {
         this.id = id;
         this.idFromUser = idFromUser;
         this.idToUser = idToUser;
-        this.idLastMessage = idLastMessage;
+        this.lastMessage = lastMessage;
     }
 
     public Dialog(Long idFromUser, Long idToUser) {
@@ -40,12 +40,12 @@ public class Dialog {
         return id;
     }
 
-    public Long getIdLastMessage() {
-        return idLastMessage;
+    public Message getLastMessage() {
+        return lastMessage;
     }
 
-    public void setIdLastMessage(Long idLastMessage) {
-        this.idLastMessage = idLastMessage;
+    public void setLastMessage(Message lastMessage) {
+        this.lastMessage = lastMessage;
     }
 
     public void setId(Long id) {
@@ -74,7 +74,7 @@ public class Dialog {
                 "id=" + id +
                 ", idFromUser=" + idFromUser +
                 ", idToUser=" + idToUser +
-                ", idLastMessage='" + idLastMessage + '\'' +
+                ", idLastMessage='" + lastMessage + '\'' +
                 '}';
     }
 }

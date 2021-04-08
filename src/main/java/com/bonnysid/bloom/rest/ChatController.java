@@ -1,6 +1,7 @@
 package com.bonnysid.bloom.rest;
 
 import com.bonnysid.bloom.model.Message;
+import com.bonnysid.bloom.model.view.DialogView;
 import com.bonnysid.bloom.model.view.MessageView;
 import com.bonnysid.bloom.services.ChatService;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/1.0/")
+@CrossOrigin(origins = "http://localhost:3000")
 public class ChatController {
 
     private final ChatService chatService;
@@ -40,5 +42,10 @@ public class ChatController {
     @DeleteMapping("dialogs/{id}")
     public void deleteDialog(@PathVariable Long id) {
         chatService.deleteDialog(id);
+    }
+
+    @GetMapping("dialogs")
+    public List<DialogView> getDialogs() {
+        return chatService.getDialogs();
     }
 }

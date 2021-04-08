@@ -6,13 +6,13 @@ public class DialogView {
     private Long id;
     private String username;
     private String photo;
-    private LocalDate date;
+    private MessageView lastMessage;
 
-    public DialogView(Long id, String username, String photo, LocalDate date) {
+    public DialogView(Long id, String username, String photo, MessageView lastMessage) {
         this.id = id;
         this.username = username;
         this.photo = photo;
-        this.date = date;
+        this.lastMessage = lastMessage;
     }
 
     public Long getId() {
@@ -21,6 +21,14 @@ public class DialogView {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public MessageView getMessage() {
+        return lastMessage;
+    }
+
+    public void setMessage(MessageView lastMessage) {
+        this.lastMessage = lastMessage;
     }
 
     public String getUsername() {
@@ -39,21 +47,13 @@ public class DialogView {
         this.photo = photo;
     }
 
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
     @Override
     public String toString() {
         return "DialogView{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", photo='" + photo + '\'' +
-                ", date=" + date +
+                ", lastMessage=" + lastMessage +
                 '}';
     }
 }

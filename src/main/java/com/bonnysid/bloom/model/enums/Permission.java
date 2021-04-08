@@ -2,9 +2,11 @@ package com.bonnysid.bloom.model.enums;
 
 public enum Permission {
     USER_READ("user:read"),
+    USER_DELETE("user:delete"),
+    USER_UPDATE("user:update"),
     USER_WRITE("user:write");
 
-    private String permission;
+    private final String permission;
 
     public String getPermission() {
         return permission;

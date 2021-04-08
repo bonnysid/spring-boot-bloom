@@ -1,6 +1,6 @@
-package com.bonnysid.bloom.rest;
+package com.bonnysid.bloom.model;
 
-public class AuthenticationRequestDTO {
+public class LoginRequest {
     private String email;
     private String password;
 

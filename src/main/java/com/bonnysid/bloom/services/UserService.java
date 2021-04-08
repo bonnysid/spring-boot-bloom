@@ -55,15 +55,15 @@ public class UserService {
         return new UserView(user, subscribesService.checkSubscribe(user.getId()));
     }
 
-    public void postUser(User user) {
-        Optional<User> userByEmail = userRepository.getUserByEmail(user.getEmail());
-        Optional<User> userByUsername = userRepository.getUserByUsername(user.getUsername());
-        if (userByEmail.isPresent()) throw new IllegalStateException("Email is taken");
-        if (userByUsername.isPresent()) throw new IllegalStateException("Username is taken");
-        user.setRole(new HashSet<Role>(new Role[]{new Role(Roles.USER)}));
-        user.setStatus(Status.ACTIVE);
-        userRepository.save(user);
-    }
+//    public void postUser(User user) {
+//        Optional<User> userByEmail = userRepository.getUserByEmail(user.getEmail());
+//        Optional<User> userByUsername = userRepository.getUserByUsername(user.getUsername());
+//        if (userByEmail.isPresent()) throw new IllegalStateException("Email is taken");
+//        if (userByUsername.isPresent()) throw new IllegalStateException("Username is taken");
+//        user.setRole(new HashSet<Role>(new Role[]{new Role(Roles.USER)}));
+//        user.setStatus(Status.ACTIVE);
+//        userRepository.save(user);
+//    }
 
     public void deleteUser(long id) {
         boolean userExists = userRepository.existsById(id);

@@ -62,6 +62,14 @@ public class User {
     public User() {
     }
 
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.status = Status.ACTIVE;
+//        this.role = new HashSet<>(new Role(""))
+    }
+
     public User(String username, String email, String profileStatus, LocalDate dateOfBirthday) {
         this.username = username;
         this.email = email;

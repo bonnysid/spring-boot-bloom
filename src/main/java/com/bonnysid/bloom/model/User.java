@@ -6,8 +6,10 @@ import com.bonnysid.bloom.model.enums.Status;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static javax.persistence.CascadeType.ALL;
 
@@ -27,7 +29,7 @@ public class User {
 
     @Column(name = "password", nullable = false)
     private String password;
-    
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status", columnDefinition = "varchar(20)", nullable = false)
     private Status status;
@@ -51,9 +53,11 @@ public class User {
     @Transient
     private Integer age;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    private Roles role;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> role = new HashSet<>();
 
     public User() {
     }
@@ -93,11 +97,11 @@ public class User {
         this.password = password;
     }
 
-    public Roles getRole() {
+    public Set<Role> getRole() {
         return role;
     }
 
-    public void setRole(Roles role) {
+    public void setRole(Set<Role> role) {
         this.role = role;
     }
 

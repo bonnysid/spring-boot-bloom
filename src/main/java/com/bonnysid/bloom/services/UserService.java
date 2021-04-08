@@ -60,7 +60,7 @@ public class UserService {
         Optional<User> userByUsername = userRepository.getUserByUsername(user.getUsername());
         if (userByEmail.isPresent()) throw new IllegalStateException("Email is taken");
         if (userByUsername.isPresent()) throw new IllegalStateException("Username is taken");
-        user.setRole(Roles.USER);
+        user.setRole(new HashSet<Role>(new Role[]{new Role(Roles.USER)}));
         user.setStatus(Status.ACTIVE);
         userRepository.save(user);
     }

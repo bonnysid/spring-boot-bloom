@@ -1,6 +1,7 @@
 package com.bonnysid.bloom.security;
 
 import com.bonnysid.bloom.model.User;
+import com.bonnysid.bloom.model.enums.Roles;
 import com.bonnysid.bloom.model.enums.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
@@ -36,7 +37,6 @@ public class UserDetailsImpl implements UserDetails {
         List<GrantedAuthority> authorities = user.getRole().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());
-
         return new UserDetailsImpl(
                 user.getId(),
                 user.getUsername(),

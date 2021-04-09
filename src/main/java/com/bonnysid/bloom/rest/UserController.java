@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @GetMapping("users")
-    @PreAuthorize("hasAuthority('user:read')")
+    @PreAuthorize("hasAuthority('USER')")
     public List<UserListView> getUsers() {
         return userService.getUsers();
     }
@@ -40,23 +40,21 @@ public class UserController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('user:write')")
     public void putPhoto(@PathVariable("id") long id, @RequestParam("image") MultipartFile image) {
-        System.out.println(image);
         userService.putPhoto(id, image);
     }
 
 
     @GetMapping(path = "profile/{id}")
-    @PreAuthorize("hasAuthority('user:read')")
     public UserView getUser(@PathVariable long id) {
         return userService.getUser(id);
     }
 
-    @PostMapping("users")
-    @PreAuthorize("hasAuthority('user:write')")
-    public User postUser(@RequestBody User user) {
-        userService.postUser(user);
-        return user;
-    }
+//    @PostMapping("users")
+//    @PreAuthorize("hasAuthority('user:write')")
+//    public User postUser(@RequestBody User user) {
+//        userService.postUser(user);
+//        return user;
+//    }
 
     @DeleteMapping(path = "users/{id}")
     @PreAuthorize("hasAuthority('user:write')")

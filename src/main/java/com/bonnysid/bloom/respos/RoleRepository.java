@@ -1,6 +1,5 @@
 package com.bonnysid.bloom.respos;
 
-import com.bonnysid.bloom.model.Post;
 import com.bonnysid.bloom.model.Role;
 import com.bonnysid.bloom.model.enums.Roles;
 import org.springframework.data.jpa.repository.JpaRepository;

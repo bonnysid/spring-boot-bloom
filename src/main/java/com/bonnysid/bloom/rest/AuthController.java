@@ -45,8 +45,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    @PreAuthorize("hasAuthority('user:read')")
     public ResponseEntity<?> authenticate(@RequestBody LoginRequest loginRequest) {
+        System.out.println(loginRequest);
 //        try {
 //            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 //            User user = userRepository.getUserByEmail(request.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User doesn't exists"));
@@ -58,7 +58,7 @@ public class AuthController {
 //        } catch (AuthenticationException e) {
 //            return new ResponseEntity<>("Invalid email/password combination", HttpStatus.FORBIDDEN);
 //        }
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtTokenProvider.createToken(authentication);
 
@@ -75,7 +75,6 @@ public class AuthController {
                 roles));
     }
 
-    @PreAuthorize("hasAuthority('user:read')")
     @PostMapping("/logout")
     public void logout(HttpServletRequest request, HttpServletResponse response) {
         SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
@@ -84,7 +83,6 @@ public class AuthController {
 
 
     @PostMapping("/signup")
-    @PreAuthorize("hasAuthority('user:read')")
     public ResponseEntity<?> registerUser(@RequestBody SignUpRequest request) {
         if(userRepository.existsByUsername(request.getUsername())) {
             return ResponseEntity
@@ -134,7 +132,7 @@ public class AuthController {
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
-    @PreAuthorize("hasAuthority('user:read')")
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/me")
     public Me getMe() {
         return userService.getMe();

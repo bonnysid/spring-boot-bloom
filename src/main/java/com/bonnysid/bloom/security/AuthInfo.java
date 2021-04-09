@@ -16,6 +16,7 @@ public class AuthInfo {
     }
 
     public String getAuthEmail() {
+        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() == "anonymousUser") return null;
         return ((UserDetails) (SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getUsername();
     }
 

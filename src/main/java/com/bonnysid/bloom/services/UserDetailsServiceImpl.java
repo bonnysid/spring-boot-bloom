@@ -2,7 +2,6 @@ package com.bonnysid.bloom.services;
 
 import com.bonnysid.bloom.model.User;
 import com.bonnysid.bloom.respos.UserRepository;
-import com.bonnysid.bloom.security.SecurityUser;
 import com.bonnysid.bloom.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,8 +22,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.getUserByEmail(email).orElseThrow(() ->
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println(username);
+        User user = userRepository.getUserByUsername(username).orElseThrow(() ->
                 new UsernameNotFoundException("User doesn't exists"));
         return UserDetailsImpl.build(user);
     }

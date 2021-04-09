@@ -7,8 +7,6 @@ import com.bonnysid.bloom.model.view.UserListView;
 import com.bonnysid.bloom.security.AuthInfo;
 import com.bonnysid.bloom.storage.FileStore;
 import com.bonnysid.bloom.model.*;
-import com.bonnysid.bloom.model.enums.Roles;
-import com.bonnysid.bloom.model.enums.Status;
 import com.bonnysid.bloom.respos.UserRepository;
 import org.apache.http.entity.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;

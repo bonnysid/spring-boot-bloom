@@ -20,6 +20,7 @@ public class SubscribesService {
     }
 
     public boolean checkSubscribe(Long id) {
+        if(authInfo.getAuthEmail() == null) return false;
         return subscribesRepository.findSubscribes(authInfo.getAuthEmail(), id).isPresent();
     }
 

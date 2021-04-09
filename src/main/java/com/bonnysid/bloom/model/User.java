@@ -1,6 +1,5 @@
 package com.bonnysid.bloom.model;
 
-import com.bonnysid.bloom.model.enums.Roles;
 import com.bonnysid.bloom.model.enums.Status;
 
 import javax.persistence.*;

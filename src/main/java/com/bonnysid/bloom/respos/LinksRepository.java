@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface LinksRepository extends JpaRepository<Link, Long> {
-    @Query(value = "select * from links where user_id = ?1", nativeQuery = true)
+    @Query(value = "select * from link where user_id = ?1", nativeQuery = true)
     public List<Link> getLinksByUserId(long id);
 }

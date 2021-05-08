@@ -1,7 +1,5 @@
 package com.bonnysid.bloom.rest;
 
-import com.bonnysid.bloom.model.Subscribe;
-import com.bonnysid.bloom.model.User;
 import com.bonnysid.bloom.services.SubscribesService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

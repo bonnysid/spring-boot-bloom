@@ -12,9 +12,9 @@ import java.util.Optional;
 
 @Repository
 public interface SubscribesRepository extends JpaRepository<Subscribe, Long> {
-    @Query(value = "select * from subscribes where email = ?1 and id_followed_user = ?2", nativeQuery = true)
+    @Query(value = "select * from subscribe where email = ?1 and id_followed_user = ?2", nativeQuery = true)
     public Optional<Subscribe> findSubscribes(String email, long id);
 
-    @Query(value = "select * from subscribes where email = ?1", nativeQuery = true)
+    @Query(value = "select * from subscribe where email = ?1", nativeQuery = true)
     public Optional<List<Subscribe>> findAllSubscribes(String email);
 }

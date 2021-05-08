@@ -5,10 +5,15 @@ import com.bonnysid.bloom.model.enums.LinksTypes;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "links")
+//@Table(name = "links")
 public class Link {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(
+            name = "link_sequence",
+            sequenceName = "link_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "link_sequence")
     private Long id;
 
     @Enumerated(EnumType.STRING)

@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    @Query(value = "select * from posts where user_id = ?1", nativeQuery = true)
+    @Query(value = "select * from post where user_id = ?1", nativeQuery = true)
     public List<Post> getPostsByUserId(long id);
 }

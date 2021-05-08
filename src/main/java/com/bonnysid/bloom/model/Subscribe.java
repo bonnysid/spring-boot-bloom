@@ -5,7 +5,7 @@ import com.bonnysid.bloom.model.view.SubscribeKey;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "subscribes")
+//@Table(name = "subscribes")
 @IdClass(SubscribeKey.class)
 public class Subscribe {
     @Id

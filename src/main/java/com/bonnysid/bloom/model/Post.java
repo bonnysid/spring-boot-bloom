@@ -5,7 +5,7 @@ import javax.persistence.*;
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity
-@Table(name = "posts")
+//@Table(name = "posts")
 public class Post {
     @Id
     @SequenceGenerator(name = "post_seq", sequenceName = "post_seq", allocationSize = 1)
@@ -17,6 +17,15 @@ public class Post {
 
     @Column(name = "text", nullable = false, columnDefinition = "TEXT")
     private String text;
+
+    @Column(name = "date", nullable = false, columnDefinition = "date")
+    private String date;
+
+    public Post(String title, String text, String date) {
+        this.title = title;
+        this.text = text;
+        this.date = date;
+    }
 
     public Post() {
     }
@@ -62,6 +71,7 @@ public class Post {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", text='" + text + '\'' +
+                ", date='" + date + '\'' +
                 '}';
     }
 }

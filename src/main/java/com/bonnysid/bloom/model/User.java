@@ -12,11 +12,16 @@ import java.util.Set;
 
 import static javax.persistence.CascadeType.ALL;
 
-@Entity
-@Table(name = "Users")
+@Entity(name = "users")
+//@Table(name = "Users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(
+            name = "user_sequence",
+            sequenceName = "user_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
     @Column(name = "id", updatable = false)
     private long id;
 

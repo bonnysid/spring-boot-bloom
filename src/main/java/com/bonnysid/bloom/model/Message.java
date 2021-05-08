@@ -1,15 +1,18 @@
 package com.bonnysid.bloom.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "message")
+//@Table(name = "message")
 public class Message {
     @Id
+    @SequenceGenerator(
+            name = "mes_sequence",
+            sequenceName = "mes_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mes_sequence")
     private Long id;
 
     @Column(name = "text")

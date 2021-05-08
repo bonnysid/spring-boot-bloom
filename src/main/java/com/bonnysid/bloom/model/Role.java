@@ -5,10 +5,15 @@ import com.bonnysid.bloom.model.enums.Roles;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "roles")
+//@Table(name = "roles")
 public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(
+            name = "role_sequence",
+            sequenceName = "role_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_sequence")
     private Integer id;
 
     @Enumerated(EnumType.STRING)

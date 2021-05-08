@@ -1,7 +1,6 @@
 package com.bonnysid.bloom.security;
 
 import com.bonnysid.bloom.model.User;
-import com.bonnysid.bloom.model.enums.Roles;
 import com.bonnysid.bloom.model.enums.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;

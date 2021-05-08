@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @GetMapping("users")
-    @PreAuthorize("hasAuthority('USER')")
+//    @PreAuthorize("hasAuthority('user:read')")
     public List<UserListView> getUsers() {
         return userService.getUsers();
     }

@@ -5,9 +5,15 @@ import javax.persistence.*;
 import static javax.persistence.CascadeType.ALL;
 
 @Entity
-@Table(name = "dialogs")
+//@Table(name = "dialogs")
 public class Dialog {
     @Id
+    @SequenceGenerator(
+            name = "dialog_sequence",
+            sequenceName = "dialog_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dialog_sequence")
     private Long id;
 
     @Column(name = "id_from_user")

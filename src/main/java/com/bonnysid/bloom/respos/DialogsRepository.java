@@ -9,13 +9,13 @@ import java.util.Optional;
 
 public interface DialogsRepository extends JpaRepository<Dialog, Long> {
 
-    @Query(value = "select * from dialogs where id_from_user = ?1", nativeQuery = true)
+    @Query(value = "select * from dialog where id_from_user = ?1", nativeQuery = true)
     public Optional<List<Dialog>> getAllByUserID(Long id);
 
-    @Query(value = "select * from dialogs where id_from_user = ?1 and id_to_user = ?2", nativeQuery = true)
+    @Query(value = "select * from dialog where id_from_user = ?1 and id_to_user = ?2", nativeQuery = true)
     public Optional<Dialog> findByFromIDAndToID(Long fromID, Long toID);
 
-    @Query(value = "insert into dialogs(id_from_user, id_to_user) values(?1, ?2)", nativeQuery = true)
+    @Query(value = "insert into dialog(id_from_user, id_to_user) values(?1, ?2)", nativeQuery = true)
     public Optional<Dialog> saveDialog(Long fromID, Long toID);
 }
 

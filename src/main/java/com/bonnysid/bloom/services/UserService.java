@@ -35,7 +35,7 @@ public class UserService {
     }
 
     public List<UserListView> getUsers() {
-        String username = authInfo.getAuthEmail();
+        String username = authInfo.getAuthUsername();
         List<Long> followList = subscribesService.getAllSubscribes();
 
         return userRepository.findAll().stream()
@@ -125,6 +125,6 @@ public class UserService {
     }
 
     public Me getMe() {
-        return new Me(authInfo.getAuthId(), authInfo.getAuthEmail(), authInfo.getAuthUsername());
+        return new Me(authInfo.getAuthId(), authInfo.getAuthUsername(), authInfo.getAuthUsername());
     }
 }

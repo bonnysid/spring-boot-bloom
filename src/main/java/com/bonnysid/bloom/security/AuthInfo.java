@@ -15,17 +15,16 @@ public class AuthInfo {
         this.userRepository = userRepository;
     }
 
-    public String getAuthEmail() {
+    public String getAuthUsername() {
         if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() == "anonymousUser") return null;
         return ((UserDetails) (SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getUsername();
     }
 
-    public String getAuthUsername() {
-        return userRepository.getUserByEmail(getAuthEmail()).orElseThrow(() -> new IllegalStateException("User doesn't exists!")).getUsername();
+    public String getAuthEmail() {
+        return userRepository.getUserByUsername(getAuthUsername()).orElseThrow(() -> new IllegalStateException("User doesn't exists!")).getEmail();
     }
 
     public Long getAuthId() {
-        System.out.println(getAuthEmail());
-        return userRepository.getUserIdByEmail(getAuthEmail()).orElseThrow(() -> new IllegalStateException("User doesn't exists!"));
+        return userRepository.getUserByUsername(getAuthUsername()).orElseThrow(() -> new IllegalStateException("User doesn't exists!")).getId();
     }
 }

@@ -46,7 +46,6 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(@RequestBody LoginRequest loginRequest) {
-        System.out.println(loginRequest);
 //        try {
 //            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 //            User user = userRepository.getUserByEmail(request.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User doesn't exists"));
@@ -132,9 +131,14 @@ public class AuthController {
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
-    @PreAuthorize("hasRole('USER')")
+
     @GetMapping("/me")
-    public Me getMe() {
-        return userService.getMe();
+    public ResponseEntity<?> getMe() {
+        try {
+            Me data = userService.getMe();
+            return ResponseEntity.ok().body(data);
+        } catch (Error error) {
+            return ResponseEntity.badRequest().body(error);
+        }
     }
 }

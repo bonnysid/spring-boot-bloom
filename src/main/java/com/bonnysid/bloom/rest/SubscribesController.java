@@ -15,19 +15,19 @@ public class SubscribesController {
     }
 
     @GetMapping("{id}")
-    @PreAuthorize("hasAuthority('user:read')")
+    @PreAuthorize("hasAuthority('USER')")
     public boolean checkSubscribe(@PathVariable long id) {
         return subscribesService.checkSubscribe(id);
     }
 
     @PostMapping("{id}")
-    @PreAuthorize("hasAuthority('user:read')")
+    @PreAuthorize("hasAuthority('USER')")
     public void follow(@PathVariable long id) {
         subscribesService.follow(id);
     }
 
     @DeleteMapping("{id}")
-    @PreAuthorize("hasAuthority('user:read')")
+    @PreAuthorize("hasAuthority('USER')")
     public void unfollow(@PathVariable long id) {
         subscribesService.unfollow(id);
     }

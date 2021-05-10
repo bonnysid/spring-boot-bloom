@@ -5,10 +5,7 @@ import com.bonnysid.bloom.model.enums.Status;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static javax.persistence.CascadeType.ALL;
 
@@ -57,11 +54,11 @@ public class User {
     @Transient
     private Integer age;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = ALL)
     @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> role = new HashSet<>();
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id")})
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
@@ -109,12 +106,12 @@ public class User {
         this.password = password;
     }
 
-    public Set<Role> getRole() {
-        return role;
+    public Collection<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(Set<Role> role) {
-        this.role = role;
+    public void setRoles(Set<Role> role) {
+        this.roles = role;
     }
 
     public Status getStatus() {

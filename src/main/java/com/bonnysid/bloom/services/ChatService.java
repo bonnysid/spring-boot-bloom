@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,10 +73,11 @@ public class ChatService {
 //        Dialog dialog = dialogsRepository.findByFromIDAndToID()
     }
 
-    public void createDialog(Long idTo) {
+    public Dialog createDialog(Long idTo) {
         if (dialogsRepository.findByFromIDAndToID(authInfo.getAuthId(), idTo).isPresent())
             throw new IllegalStateException("This dialog already exists");
-        dialogsRepository.saveDialog(authInfo.getAuthId(), idTo);
+        Dialog dialog = new Dialog(authInfo.getAuthId(), idTo);
+        return dialog;
     }
 
     public void deleteDialog(Long id) {

@@ -24,10 +24,14 @@ public class UserController {
     }
 
     @GetMapping("users")
-//    @PreAuthorize("hasAuthority('user:read')")
+    @PreAuthorize("hasAuthority('USER')")
     public List<UserListView> getUsers() {
         return userService.getUsers();
     }
+
+    @GetMapping("friends")
+    @PreAuthorize("hasAuthority('USER')")
+    public List<UserListView> getFriends() { return userService.getFriends();}
 
     @GetMapping("profile/photo/{id}")
     @PreAuthorize("hasAuthority('user:read')")

@@ -3,6 +3,9 @@ package com.bonnysid.bloom.model;
 import com.bonnysid.bloom.model.enums.Roles;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 //@Table(name = "roles")
@@ -19,6 +22,9 @@ public class Role {
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private Roles name;
+
+    @ManyToMany(cascade = CascadeType.ALL,mappedBy = "roles", fetch = FetchType.LAZY)
+    private Set<User> users = new HashSet<>();
 
     public Role() {
     }
@@ -41,6 +47,14 @@ public class Role {
 
     public void setName(Roles name) {
         this.name = name;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 
     @Override

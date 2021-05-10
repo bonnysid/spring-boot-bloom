@@ -125,6 +125,14 @@ public class UserService {
     }
 
     public Me getMe() {
-        return new Me(authInfo.getAuthId(), authInfo.getAuthUsername(), authInfo.getAuthUsername());
+        String username = authInfo.getAuthUsername();
+        if (username == null) return new Me(null, null, null);
+        return new Me(authInfo.getAuthId(), username, authInfo.getAuthUsername());
+    }
+
+    public List<UserListView> getFriends() {
+        return getUsers().stream()
+                .filter(UserListView::isFollowed)
+                .collect(Collectors.toList());
     }
 }

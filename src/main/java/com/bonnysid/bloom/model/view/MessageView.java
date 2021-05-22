@@ -1,28 +1,29 @@
 package com.bonnysid.bloom.model.view;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class MessageView {
     private Long id;
     private String text;
     private String fromUsername;
-    private LocalDate date;
+    private LocalDateTime date;
 
     public MessageView() {
     }
 
-    public MessageView(Long id, String text, String fromUsername, LocalDate date) {
+    public MessageView(Long id, String text, String fromUsername, LocalDateTime date) {
         this.id = id;
         this.text = text;
         this.fromUsername = fromUsername;
         this.date = date;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

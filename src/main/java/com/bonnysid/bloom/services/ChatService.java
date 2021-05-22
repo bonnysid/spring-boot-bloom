@@ -10,6 +10,7 @@ import com.bonnysid.bloom.respos.MessageRepository;
 import com.bonnysid.bloom.security.AuthInfo;
 import com.bonnysid.bloom.security.JwtAuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -38,11 +39,22 @@ public class ChatService {
     public void sendMessage(Long idTo, Message message) {
         if (userService.getUser(idTo) != null) {
             messageRepository.save(message);
-            simpMessagingTemplate.convertAndSend("/topic/messages/" + idTo, message);
-            if (dialogsRepository.findByFromIDAndToID(idTo, message.getIdFromUser()).isEmpty()) {
+            String username = userService.getUser(message.getIdFromUser()).getUsername();
+            MessageView messageView = new MessageView(message.getId(), message.getText(), username, message.getDate());
+            simpMessagingTemplate.convertAndSend("/topic/messages/" + idTo, messageView);
+            simpMessagingTemplate.convertAndSend("/topic/messages/" + message.getIdFromUser(), messageView);
+            Optional<Dialog> toDialog = dialogsRepository.findByFromIDAndToID(idTo, message.getIdFromUser());
+            if (toDialog.isEmpty()) {
                 Dialog dialog = dialogsRepository.save(new Dialog(idTo, message.getIdFromUser()));
                 Message m = new Message();
                 m.setDialogId(dialog.getId());
+                m.setDate(message.getDate());
+                m.setText(message.getText());
+                m.setIdFromUser(message.getIdFromUser());
+                messageRepository.save(m);
+            } else {
+                Message m = new Message();
+                m.setDialogId(toDialog.get().getId());
                 m.setDate(message.getDate());
                 m.setText(message.getText());
                 m.setIdFromUser(message.getIdFromUser());
@@ -52,7 +64,7 @@ public class ChatService {
     }
 
     public List<MessageView> getMessagesByDialogId(Long id) {
-        if (!checkDialogRequest(id)) throw new JwtAuthenticationException("You don't have access to this dialog!");
+        if (!isDialogExists(id)) throw new JwtAuthenticationException("Dialog doesn't exists!");
         return messageRepository.getMessagesByDialogId(id).orElseThrow(() -> new IllegalStateException("Dialog with this id doesn't exists!")).stream()
                 .map(message -> new MessageView(message.getId(), message.getText(), userService.getUser(message.getIdFromUser()).getUsername(), message.getDate()))
                 .collect(Collectors.toList());
@@ -69,15 +81,22 @@ public class ChatService {
         return dialogsRepository.findByFromIDAndToID(authInfo.getAuthId(), id).isPresent();
     }
 
+    public boolean isDialogExists(Long id) {
+        return dialogsRepository.existsById(id);
+    }
+
     public void startChat(Long id) {
 //        Dialog dialog = dialogsRepository.findByFromIDAndToID()
     }
 
     public Dialog createDialog(Long idTo) {
-        if (dialogsRepository.findByFromIDAndToID(authInfo.getAuthId(), idTo).isPresent())
-            throw new IllegalStateException("This dialog already exists");
+        Optional<Dialog> optionalDialog = dialogsRepository.findByFromIDAndToID(authInfo.getAuthId(), idTo);
+        if (optionalDialog.isPresent())
+            return optionalDialog.get();
         Dialog dialog = new Dialog(authInfo.getAuthId(), idTo);
-        return dialog;
+        Dialog dialogToUser = new Dialog(idTo, authInfo.getAuthId());
+        dialogsRepository.save(dialogToUser);
+        return dialogsRepository.save(dialog);
     }
 
     public void deleteDialog(Long id) {
@@ -103,8 +122,19 @@ public class ChatService {
                                     lastMessage.getId(),
                                     lastMessage.getText(),
                                     userService.getUser(lastMessage.getIdFromUser()).getUsername(),
-                                    lastMessage.getDate()) : null);
+                                    lastMessage.getDate()) : null,
+                            dialog.getIdToUser()
+                            );
                 })
                 .collect(Collectors.toList());
+    }
+
+    public ResponseEntity<?> deleteMessage(Long id) {
+        messageRepository.deleteById(id);
+        return ResponseEntity.ok().body(true);
+    }
+
+    public ResponseEntity<?> editMessage(Long id, String text) {
+        return ResponseEntity.ok().body(true);
     }
 }

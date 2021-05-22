@@ -2,6 +2,7 @@ package com.bonnysid.bloom.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 //@Table(name = "message")
@@ -21,8 +22,8 @@ public class Message {
     @Column(name = "id_dialog")
     private Long dialogId;
 
-    @Column(name = "date")
-    private LocalDate date;
+    @Column(name = "date", columnDefinition = "timestamp")
+    private LocalDateTime date;
 
     @Column(name = "id_from_user")
     private Long idFromUser;
@@ -30,7 +31,7 @@ public class Message {
     public Message() {
     }
 
-    public Message(Long id, String text, Long dialogId, Long idFromUser, LocalDate date) {
+    public Message(Long id, String text, Long dialogId, Long idFromUser, LocalDateTime date) {
         this.id = id;
         this.text = text;
         this.dialogId = dialogId;
@@ -70,15 +71,15 @@ public class Message {
         this.dialogId = dialogId;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
-    public Message(String text, Long dialogId, LocalDate date) {
+    public Message(String text, Long dialogId, LocalDateTime date) {
         this.text = text;
         this.dialogId = dialogId;
         this.date = date;

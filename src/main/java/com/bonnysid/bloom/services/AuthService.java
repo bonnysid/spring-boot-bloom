@@ -46,6 +46,7 @@ public class AuthService {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtTokenProvider.createToken(authentication);
+        System.out.println(SecurityContextHolder.getContext().getAuthentication());
 
         UserDetailsImpl userDetailsImpl = (UserDetailsImpl) authentication.getPrincipal();
         List<String> roles = userDetailsImpl.getAuthorities().stream()

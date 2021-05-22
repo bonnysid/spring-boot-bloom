@@ -21,10 +21,14 @@ public class Post {
     @Column(name = "date", nullable = false, columnDefinition = "date")
     private String date;
 
-    public Post(String title, String text, String date) {
+    @Column(name = "user_id", nullable = false, columnDefinition = "long")
+    private Long userId;
+
+    public Post(String title, String text, String date, Long userId) {
         this.title = title;
         this.text = text;
         this.date = date;
+        this.userId = userId;
     }
 
     public Post() {
@@ -63,6 +67,22 @@ public class Post {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     @Override

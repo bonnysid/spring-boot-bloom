@@ -1,18 +1,34 @@
 package com.bonnysid.bloom.model.view;
 
-import java.time.LocalDate;
-
 public class DialogView {
     private Long id;
     private String username;
     private String photo;
     private MessageView lastMessage;
+    private Long idTo;
 
-    public DialogView(Long id, String username, String photo, MessageView lastMessage) {
+    public DialogView(Long id, String username, String photo, MessageView lastMessage, Long idTo) {
         this.id = id;
         this.username = username;
         this.photo = photo;
         this.lastMessage = lastMessage;
+        this.idTo = idTo;
+    }
+
+    public MessageView getLastMessage() {
+        return lastMessage;
+    }
+
+    public void setLastMessage(MessageView lastMessage) {
+        this.lastMessage = lastMessage;
+    }
+
+    public Long getIdTo() {
+        return idTo;
+    }
+
+    public void setIdTo(Long idTo) {
+        this.idTo = idTo;
     }
 
     public Long getId() {

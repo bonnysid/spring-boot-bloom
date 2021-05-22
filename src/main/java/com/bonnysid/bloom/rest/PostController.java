@@ -3,6 +3,7 @@ package com.bonnysid.bloom.rest;
 import com.bonnysid.bloom.services.PostService;
 import com.bonnysid.bloom.model.Post;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +23,14 @@ public class PostController {
     }
 
     @GetMapping(path = "{id}")
-    @PreAuthorize("hasAuthority('user:read')")
-    public List<Post> getUsers(@PathVariable long id) {
+    @PreAuthorize("hasAuthority('USER')")
+    public List<Post> getPosts(@PathVariable long id) {
         return postService.getPosts(id);
+    }
+
+    @PostMapping()
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<?> createPost(@RequestBody Post post) {
+        return postService.createPost(post);
     }
 }

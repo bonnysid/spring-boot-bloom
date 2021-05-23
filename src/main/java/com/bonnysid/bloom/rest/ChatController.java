@@ -8,7 +8,6 @@ import com.bonnysid.bloom.services.ChatService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,5 +61,11 @@ public class ChatController {
     @DeleteMapping("/message/{id}")
     public ResponseEntity<?> deleteMessage(@PathVariable Long id) {
         return chatService.deleteMessage(id);
+    }
+
+    @PutMapping(path = "/message/{id}")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<?> updateMessage(@PathVariable Long id, @RequestBody Message message) {
+        return chatService.updateMessage(id, message);
     }
 }

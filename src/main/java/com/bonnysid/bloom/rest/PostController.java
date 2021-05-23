@@ -1,5 +1,6 @@
 package com.bonnysid.bloom.rest;
 
+import com.bonnysid.bloom.model.view.PostView;
 import com.bonnysid.bloom.services.PostService;
 import com.bonnysid.bloom.model.Post;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class PostController {
 
     @GetMapping(path = "{id}")
     @PreAuthorize("hasAuthority('USER')")
-    public List<Post> getPosts(@PathVariable long id) {
+    public List<PostView> getPosts(@PathVariable long id) {
         return postService.getPosts(id);
     }
 
@@ -33,4 +34,20 @@ public class PostController {
     public ResponseEntity<?> createPost(@RequestBody Post post) {
         return postService.createPost(post);
     }
+
+    @PostMapping("{id}")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<?> likePost(@PathVariable Long id) {
+        return postService.likePost(id);
+    }
+
+    @DeleteMapping("{id}")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<?> unlikePost(@PathVariable Long id) {
+        return postService.unlikePost(id);
+    }
+
+    @DeleteMapping("{id}")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<?> deletePost(@PathVariable Long id) { return postService.deletePost(id); }
 }

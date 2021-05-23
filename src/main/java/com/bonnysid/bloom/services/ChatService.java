@@ -3,6 +3,7 @@ package com.bonnysid.bloom.services;
 import com.bonnysid.bloom.model.Dialog;
 import com.bonnysid.bloom.model.Message;
 import com.bonnysid.bloom.model.view.DialogView;
+import com.bonnysid.bloom.model.view.Me;
 import com.bonnysid.bloom.model.view.MessageView;
 import com.bonnysid.bloom.model.view.UserView;
 import com.bonnysid.bloom.respos.DialogsRepository;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -104,6 +106,10 @@ public class ChatService {
         dialogsRepository.deleteById(id);
     }
 
+    public Message getMessageOrElseThrow(Long id) {
+        return messageRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Message with id=" + id + "doesn't exists!"));
+    }
+
     public List<DialogView> getDialogs() {
         return dialogsRepository
                 .getAllByUserID(authInfo.getAuthId())
@@ -134,7 +140,19 @@ public class ChatService {
         return ResponseEntity.ok().body(true);
     }
 
-    public ResponseEntity<?> editMessage(Long id, String text) {
-        return ResponseEntity.ok().body(true);
+    @Transactional
+    public ResponseEntity<?> updateMessage(Long id, Message message) {
+        try {
+            Message msg = getMessageOrElseThrow(id);
+
+            if(!message.getText().equals(msg.getText())) {
+                msg.setText(message.getText());
+            }
+
+            return ResponseEntity.ok().body(msg);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e);
+        }
+
     }
 }

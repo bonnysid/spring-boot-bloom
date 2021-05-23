@@ -2,6 +2,8 @@ package com.bonnysid.bloom.model;
 
 import javax.persistence.*;
 
+import java.time.LocalDateTime;
+
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity
@@ -19,12 +21,15 @@ public class Post {
     private String text;
 
     @Column(name = "date", nullable = false, columnDefinition = "date")
-    private String date;
+    private LocalDateTime date;
 
     @Column(name = "user_id", nullable = false, columnDefinition = "long")
     private Long userId;
 
-    public Post(String title, String text, String date, Long userId) {
+    @Column(name = "like_count", nullable = false, columnDefinition = "long")
+    private int likeCount;
+
+    public Post(String title, String text, LocalDateTime date, Long userId) {
         this.title = title;
         this.text = text;
         this.date = date;
@@ -49,6 +54,14 @@ public class Post {
         this.text = text;
     }
 
+    public int getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
+    }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -69,11 +82,11 @@ public class Post {
         this.text = text;
     }
 
-    public String getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
